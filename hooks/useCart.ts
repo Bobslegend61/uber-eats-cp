@@ -31,7 +31,7 @@ const useCart = () => {
         items: cart,
       };
 
-      //   await authUser.placeOrder(orderData);
+      await authUser.placeOrder(orderData);
       dispatch(resetCart());
       dispatch(setActivityLoader(false));
 

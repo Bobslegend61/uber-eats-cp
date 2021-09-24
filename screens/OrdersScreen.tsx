@@ -1,6 +1,7 @@
 import moment from "moment";
 import React from "react";
 import { ActivityIndicator, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CartItem from "../components/CartItem";
 import UberText from "../components/UberText";
@@ -13,7 +14,7 @@ const OrdersScreen = () => {
   const { theme } = useGeneral();
   const { loading, orders } = useOrders();
   return (
-    <View style={tw`flex-1 bg-${theme}`}>
+    <ScrollView style={tw`flex-1 bg-${theme}`}>
       <SafeAreaView style={tw`flex-1`}>
         <View style={tw`bg-${theme}-accent p-3`}>
           <UberText
@@ -89,7 +90,7 @@ const OrdersScreen = () => {
             ))
           : null}
       </SafeAreaView>
-    </View>
+    </ScrollView>
   );
 };
 

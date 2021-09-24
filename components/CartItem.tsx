@@ -33,7 +33,7 @@ const CartItem: React.FC<Props> = ({ restaurant, food, orders }) => {
         </UberText>
       </ImageBackground>
       <UberText twStyle={tw`text-${theme}-primary`}>{food.name}</UberText>
-      {orders ? null : (
+      {!orders ? (
         <View style={tw`items-center justify-between`}>
           <View style={tw`flex-row items-center justify-between`}>
             <TouchableOpacity
@@ -116,7 +116,7 @@ const CartItem: React.FC<Props> = ({ restaurant, food, orders }) => {
             </UberText>
           </TouchableOpacity>
         </View>
-      )}
+      ) : null}
     </View>
   );
 };
