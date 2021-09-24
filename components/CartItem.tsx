@@ -11,9 +11,10 @@ import UberText from "./UberText";
 interface Props {
   restaurant: any;
   food: any;
+  orders?: boolean;
 }
 
-const CartItem: React.FC<Props> = ({ restaurant, food }) => {
+const CartItem: React.FC<Props> = ({ restaurant, food, orders }) => {
   const { theme, dispatch } = useGeneral();
   return (
     <View
@@ -32,11 +33,45 @@ const CartItem: React.FC<Props> = ({ restaurant, food }) => {
         </UberText>
       </ImageBackground>
       <UberText twStyle={tw`text-${theme}-primary`}>{food.name}</UberText>
-      <View style={tw`items-center justify-between`}>
-        <View style={tw`flex-row items-center justify-between`}>
-          <TouchableOpacity
-            onPress={() => {
-              if (food.quantity > 1) {
+      {orders ? null : (
+        <View style={tw`items-center justify-between`}>
+          <View style={tw`flex-row items-center justify-between`}>
+            <TouchableOpacity
+              onPress={() => {
+                if (food.quantity > 1) {
+                  dispatch(
+                    addToCart({
+                      id: restaurant.id,
+                      name: restaurant.name,
+                      image: restaurant.image_url,
+                      item: {
+                        id: food.id,
+                        name: food.name,
+                        quantity: food.quantity - 1,
+                        price: food.price,
+                        image: food.image,
+                      },
+                    }),
+                  );
+                }
+              }}
+              style={tw`bg-${theme}-accent py-1 px-2 rounded-full items-center`}
+            >
+              <Icon
+                name="remove"
+                type="ionicon"
+                size={14}
+                color={appTheme?.[theme].primary}
+              />
+            </TouchableOpacity>
+            <UberText
+              twStyle={[tw`mx-2 text-${theme}-primary`]}
+              csStyle={{ fontFamily: "OpenSans_600SemiBold" }}
+            >
+              {food.quantity}
+            </UberText>
+            <TouchableOpacity
+              onPress={() => {
                 dispatch(
                   addToCart({
                     id: restaurant.id,
@@ -45,75 +80,43 @@ const CartItem: React.FC<Props> = ({ restaurant, food }) => {
                     item: {
                       id: food.id,
                       name: food.name,
-                      quantity: food.quantity - 1,
+                      quantity: food.quantity + 1,
                       price: food.price,
                       image: food.image,
                     },
                   }),
                 );
-              }
-            }}
-            style={tw`bg-${theme}-accent py-1 px-2 rounded-full items-center`}
-          >
-            <Icon
-              name="remove"
-              type="ionicon"
-              size={14}
-              color={appTheme?.[theme].primary}
-            />
-          </TouchableOpacity>
-          <UberText
-            twStyle={[tw`mx-2 text-${theme}-primary`]}
-            csStyle={{ fontFamily: "OpenSans_600SemiBold" }}
-          >
-            {food.quantity}
-          </UberText>
+              }}
+              style={tw`bg-${theme}-accent py-1 px-2 rounded-full items-center`}
+            >
+              <Icon
+                name="add"
+                type="ionicon"
+                size={14}
+                color={appTheme?.[theme].primary}
+              />
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity
-            onPress={() => {
+            onPress={() =>
               dispatch(
-                addToCart({
+                removeFromCart({
                   id: restaurant.id,
-                  name: restaurant.name,
-                  image: restaurant.image_url,
-                  item: {
-                    id: food.id,
-                    name: food.name,
-                    quantity: food.quantity + 1,
-                    price: food.price,
-                    image: food.image,
-                  },
+                  itemId: food.id,
                 }),
-              );
-            }}
-            style={tw`bg-${theme}-accent py-1 px-2 rounded-full items-center`}
+              )
+            }
+            style={tw`mt-3`}
           >
-            <Icon
-              name="add"
-              type="ionicon"
-              size={14}
-              color={appTheme?.[theme].primary}
-            />
+            <UberText
+              twStyle={tw`text-${theme}-primary`}
+              csStyle={{ fontFamily: "OpenSans_400Regular" }}
+            >
+              Remove
+            </UberText>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          onPress={() =>
-            dispatch(
-              removeFromCart({
-                id: restaurant.id,
-                itemId: food.id,
-              }),
-            )
-          }
-          style={tw`mt-3`}
-        >
-          <UberText
-            twStyle={tw`text-${theme}-primary`}
-            csStyle={{ fontFamily: "OpenSans_400Regular" }}
-          >
-            Remove
-          </UberText>
-        </TouchableOpacity>
-      </View>
+      )}
     </View>
   );
 };

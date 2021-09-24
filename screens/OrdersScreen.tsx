@@ -1,3 +1,4 @@
+import moment from "moment";
 import React from "react";
 import { ActivityIndicator, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -32,6 +33,16 @@ const OrdersScreen = () => {
         {orders.length > 0
           ? orders.map((order: any) => (
               <View key={order.id}>
+                <View style={tw`my-2 px-3`}>
+                  <UberText
+                    twStyle={tw`text-lg text-${theme}-primary`}
+                    csStyle={{ fontFamily: "OpenSans_600SemiBold" }}
+                  >
+                    {moment(order.createdAt.toDate()).format(
+                      "DD/MM/YYYY HH:mm",
+                    )}
+                  </UberText>
+                </View>
                 {order.items.map((restaurant: any) => (
                   <View key={restaurant.id} style={tw`mx-2 p-2 mb-2 rounded`}>
                     <View style={tw`flex-row items-center justify-between`}>
@@ -44,7 +55,12 @@ const OrdersScreen = () => {
                     </View>
                     <View style={tw` shadow-lg`}>
                       {restaurant.items.map((food: any, i: number) => (
-                        <CartItem key={i} restaurant={restaurant} food={food} />
+                        <CartItem
+                          key={i}
+                          restaurant={restaurant}
+                          food={food}
+                          orders={true}
+                        />
                       ))}
                       <View
                         style={tw`flex-row items-center justify-between px-2 py-3 bg-${theme}-accent rounded-b-lg`}
