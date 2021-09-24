@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import useGeneral from "./useGeneral";
 
-const useRestaurants = (page: number) => {
+const useRestaurants = (page: number, browse?: boolean, search?: string) => {
   const { location } = useGeneral();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -13,7 +13,12 @@ const useRestaurants = (page: number) => {
     setLoading(true);
     setError("");
     try {
-      const data = await fetchRestaurants();
+      let data: any;
+      if (search) {
+        data = await fetchBrowseRestaurants();
+      } else {
+        data = await fetchRestaurants();
+      }
       setRestaurants(data);
       setLoading(false);
     } catch (error: any) {
@@ -34,7 +39,12 @@ const useRestaurants = (page: number) => {
     setLoading(true);
     setError("");
     try {
-      const data = await fetchRestaurants();
+      let data: any;
+      if (search) {
+        data = await fetchBrowseRestaurants();
+      } else {
+        data = await fetchRestaurants();
+      }
       setRestaurants((prevRestaurants: any) => [...prevRestaurants, ...data]);
       setLoading(false);
     } catch (error: any) {
@@ -52,12 +62,34 @@ const useRestaurants = (page: number) => {
   };
 
   const fetchRestaurants = async () => {
+    const resLen = restaurants.length;
+    const url =
+      restaurants.length > 0
+        ? `https://api.yelp.com/v3/businesses/search?term=restaurants&location=${location}&offset=${resLen}`
+        : `https://api.yelp.com/v3/businesses/search?term=restaurants&location=${location}`;
     const {
       data: { businesses },
     } = await axios({
-      url: `https://api.yelp.com/v3/businesses/search?term=restaurants&location=${location}&offset=${
-        restaurants.length > 0 ? restaurants.length : 0
-      }`,
+      url,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${YELP_API_KEY}`,
+      },
+    });
+
+    return businesses;
+  };
+
+  const fetchBrowseRestaurants = async () => {
+    const resLen = restaurants.length;
+    const url =
+      restaurants.length > 0
+        ? `https://api.yelp.com/v3/businesses/search?term=${search}&location=${location}&offset=${resLen}`
+        : `https://api.yelp.com/v3/businesses/search?term=${search}&location=${location}`;
+    const {
+      data: { businesses },
+    } = await axios({
+      url,
       method: "GET",
       headers: {
         Authorization: `Bearer ${YELP_API_KEY}`,
@@ -70,13 +102,13 @@ const useRestaurants = (page: number) => {
   const reload = () => getRestaurants();
 
   useEffect(() => {
-    if (!location || loading) return;
+    if ((browse && !search) || loading) return;
+    if ((!browse && !location) || loading) return;
     getRestaurants();
-  }, [location]);
+  }, [location, search]);
 
   useEffect(() => {
     if (page === 1 || loading || !location) return;
-
     getMoreRestaurants();
   }, [page]);
 

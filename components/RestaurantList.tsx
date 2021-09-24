@@ -11,10 +11,16 @@ import UberText from "./UberText";
 
 interface Props {
   page: number;
+  browse?: boolean;
+  search?: string;
 }
-const RestaurantList: React.FC<Props> = ({ page }) => {
+const RestaurantList: React.FC<Props> = ({ page, browse, search }) => {
   const { theme, restaurantType } = useGeneral();
-  const { loading, error, reload, restaurants } = useRestaurants(page);
+  const { loading, error, reload, restaurants } = useRestaurants(
+    page,
+    browse,
+    search,
+  );
   return (
     <>
       {restaurants.length > 0

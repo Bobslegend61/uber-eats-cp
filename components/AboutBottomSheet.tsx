@@ -236,6 +236,8 @@ const AboutBottomSheet: React.FC<Props> = ({ restaurant }) => {
                   data={weekDays}
                   keyExtractor={(item) => item}
                   horizontal
+                  showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={true}
                   ItemSeparatorComponent={() => (
                     <Divider
                       color={appTheme?.[theme].accent}

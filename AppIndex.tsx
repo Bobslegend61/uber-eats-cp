@@ -12,6 +12,7 @@ import { appTheme } from "./config";
 import useAuth from "./hooks/useAuth";
 import useGeneral from "./hooks/useGeneral";
 import tw from "./lib/tailwind";
+import BrowseScreen from "./screens/BrowseScreen";
 import OrdersScreen from "./screens/OrdersScreen";
 
 interface Screen {
@@ -40,7 +41,7 @@ const screens: Screen[] = [
   },
   {
     name: "Browse",
-    component: HomeStack,
+    component: BrowseScreen,
     iconInactive: "search-outline",
     iconActive: "search",
   },
@@ -125,6 +126,7 @@ const AppIndex = () => {
                   component={component}
                   key={i}
                   options={{
+                    unmountOnBlur: name === "Cart" ? true : false,
                     tabBarIcon: ({ focused }) => (
                       <Icon
                         color={appTheme?.[theme].primary}

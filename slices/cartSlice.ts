@@ -78,7 +78,7 @@ export const cartSlice = createSlice({
       action: PayloadAction<{ id: string; itemId?: string }>,
     ) => {
       if (action.payload.itemId) {
-        state.cart = state.cart.map((item) => {
+        const tempCart = state.cart.map((item) => {
           if (item.id === action.payload.id) {
             const items = item.items.filter(
               (product) => product.id !== action.payload.itemId,
@@ -91,6 +91,12 @@ export const cartSlice = createSlice({
             return item;
           }
         });
+
+        if (tempCart.flatMap((item) => item.items).length === 0) {
+          state.cart = [];
+        } else {
+          state.cart = tempCart;
+        }
       } else {
         state.cart = state.cart.filter((item) => item.id !== action.payload.id);
       }

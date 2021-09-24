@@ -26,17 +26,24 @@ const OrdersScreen = () => {
         </View>
 
         {loading ? (
-          <View style={tw`flex-1 items-center justify-center`}>
+          <View style={tw`flex-1 items-center justify-center mt-4`}>
             <ActivityIndicator color={appTheme?.[theme].primary} />
           </View>
         ) : null}
 
         {orders.length > 0
           ? orders.map((order: any) => (
-              <View key={order.id}>
-                <View style={tw`my-2 px-3`}>
+              <View
+                key={order.id}
+                style={tw`rounded-lg ${
+                  theme === "light"
+                    ? "border border-gray-200"
+                    : `border border-${theme}-accent`
+                } mb-3 mx-2 mt-2`}
+              >
+                <View style={tw`p-3 bg-${theme}-accent`}>
                   <UberText
-                    twStyle={tw`text-lg text-${theme}-primary`}
+                    twStyle={tw`text-${theme}-primary`}
                     csStyle={{ fontFamily: "OpenSans_600SemiBold" }}
                   >
                     {moment(order?.createdAt?.toDate()).format(
@@ -45,8 +52,8 @@ const OrdersScreen = () => {
                   </UberText>
                 </View>
                 {order.items.map((restaurant: any) => (
-                  <View key={restaurant.id} style={tw`mx-2 p-2 mb-2 rounded`}>
-                    <View style={tw`flex-row items-center justify-between`}>
+                  <View key={restaurant.id} style={tw`rounded`}>
+                    <View style={tw`flex-row items-center justify-between p-2`}>
                       <UberText
                         twStyle={tw`text-lg text-${theme}-primary`}
                         csStyle={{ fontFamily: "OpenSans_600SemiBold" }}
@@ -54,7 +61,7 @@ const OrdersScreen = () => {
                         {restaurant.name}
                       </UberText>
                     </View>
-                    <View style={tw` shadow-lg`}>
+                    <View>
                       {restaurant.items.map((food: any, i: number) => (
                         <CartItem
                           key={i}
@@ -78,8 +85,8 @@ const OrdersScreen = () => {
                         >
                           $
                           {restaurant.items
-                            .map((item) => item.price * item.quantity)
-                            .reduce((a, b) => a + b, 0)
+                            .map((item: any) => item.price * item.quantity)
+                            .reduce((a: any, b: any) => a + b, 0)
                             .toFixed(2)}
                         </UberText>
                       </View>

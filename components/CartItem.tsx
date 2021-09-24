@@ -18,7 +18,9 @@ const CartItem: React.FC<Props> = ({ restaurant, food, orders }) => {
   const { theme, dispatch } = useGeneral();
   return (
     <View
-      style={tw`mt-1 py-3 border-b border-${theme}-accent flex-row items-center justify-between`}
+      style={tw`mt-1 ${
+        orders ? "px-2" : ""
+      } py-3 border-b border-${theme}-accent flex-row items-center justify-between`}
     >
       <ImageBackground
         source={{ uri: food.image }}
@@ -32,7 +34,9 @@ const CartItem: React.FC<Props> = ({ restaurant, food, orders }) => {
           ${food.price}
         </UberText>
       </ImageBackground>
-      <UberText twStyle={tw`text-${theme}-primary`}>{food.name}</UberText>
+      <UberText twStyle={tw`text-${theme}-primary`}>{`${
+        orders ? food.quantity + " x " + food.name : food.name
+      }`}</UberText>
       {!orders ? (
         <View style={tw`items-center justify-between`}>
           <View style={tw`flex-row items-center justify-between`}>
