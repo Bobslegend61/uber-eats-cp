@@ -12,7 +12,6 @@ const useOrders = () => {
     const authUser = new User(auth.user?.id!);
     authUser.fetchOrders((docs: any) => {
       setOrders(docs);
-      console.log(orders);
       setLoading(false);
     });
   }, []);

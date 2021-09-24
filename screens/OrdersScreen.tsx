@@ -39,7 +39,7 @@ const OrdersScreen = () => {
                     twStyle={tw`text-lg text-${theme}-primary`}
                     csStyle={{ fontFamily: "OpenSans_600SemiBold" }}
                   >
-                    {moment(order.createdAt.toDate()).format(
+                    {moment(order?.createdAt?.toDate()).format(
                       "DD/MM/YYYY HH:mm",
                     )}
                   </UberText>
