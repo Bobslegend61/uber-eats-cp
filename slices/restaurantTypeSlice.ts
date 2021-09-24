@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
-const initialState: { type: "delivery" | "pickup" } = { type: "delivery" };
+const initialState: {
+  type: "delivery" | "pickup" | "all" | "restaurant_reservation";
+} = { type: "all" };
 
 export const restaurantTypeSlice = createSlice({
   name: "restaurantType",
@@ -9,7 +11,9 @@ export const restaurantTypeSlice = createSlice({
   reducers: {
     setRestaurantType: (
       state,
-      action: PayloadAction<"delivery" | "pickup">,
+      action: PayloadAction<
+        "delivery" | "pickup" | "all" | "restaurant_reservation"
+      >,
     ) => {
       state.type = action.payload;
     },
